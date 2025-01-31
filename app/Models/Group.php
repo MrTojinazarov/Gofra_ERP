@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Group extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name','status'];
 
     public function permissions()
     {

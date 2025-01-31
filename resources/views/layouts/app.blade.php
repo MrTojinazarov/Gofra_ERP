@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ERP</title>
+    <link rel="icon" href="{{ asset('erp.webp') }}" type="image/x-icon">
     <!-- Add Select2 CSS in the <head> section -->
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
@@ -64,9 +65,8 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
-                <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-                    class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text">AdminLTE 3</span>
+                <img src="{{ asset('erp.webp') }}" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text">EPR</span>
             </a>
 
             <!-- Sidebar -->
@@ -78,36 +78,82 @@
                                 alt="User Image">
                         @endif
                     </div>
-                    {{-- <div class="info">
-                        <a class="d-block">{{ auth()->check() ? auth()->user()->name : 'User' }}</a>
-                    </div> --}}
                 </div>
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ route('users.index') }}"
-                                class="nav-link {{ request()->is('users') ? 'active' : '' }}">
-                                <i class="fas fa-user"></i>
-                                <p>Users</p>
+                            <a href="{{ route('dashboard') }}"
+                                class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                                <i class="fas fa-dashboard"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li
+                            class="nav-item has-treeview {{ request()->is('users*') || request()->is('roles*') || request()->is('permissions*') || request()->is('groups*') ? 'menu-open' : '' }}">
+                            <a href="#"
+                                class="nav-link {{ request()->is('users*') || request()->is('roles*') || request()->is('permissions*') || request()->is('groups*') ? 'active' : '' }}">
+                                <i class="fas fa-cogs"></i>
+                                <p>
+                                    Auth
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('users.index') }}"
+                                        class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
+                                        <i class="fas fa-user"></i>
+                                        <p>Users</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('roles.index') }}"
+                                        class="nav-link {{ request()->is('roles*') ? 'active' : '' }}">
+                                        <i class="fas fa-user-shield"></i>
+                                        <p>Roles</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('permissions.index') }}"
+                                        class="nav-link {{ request()->is('permissions*') ? 'active' : '' }}">
+                                        <i class="fas fa-lock"></i>
+                                        <p>Permissions</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('groups.index') }}"
+                                        class="nav-link {{ request()->is('groups*') ? 'active' : '' }}">
+                                        <i class="fas fa-users"></i>
+                                        <p>Groups</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('sections.index') }}"
+                                class="nav-link {{ request()->is('sections*') ? 'active' : '' }}">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Sections</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('roles.index') }}"
-                                class="nav-link {{ request()->is('roles') ? 'active' : '' }}">
-                                <i class="fas fa-user-shield"></i>
-                                <p>Roles</p>
+                            <a href="{{ route('workers.index') }}"
+                                class="nav-link {{ request()->is('workers*') ? 'active' : '' }}">
+                                <i class="fas fa-users-cog"></i>
+                                <p>Workers</p>
                             </a>
                         </li>
-
-                        {{-- <li class="nav-item">
-                                <a href="/logout" class="nav-link {{ request()->is('logout') ? 'active' : '' }}">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    <p>
-                                        Logout
-                                    </p>
-                                </a>
-                            </li> --}}
+                        <li class="list-group-item">
+                            <form action="{{ route('logout') }}" method="POST"
+                                class="d-flex align-items-center w-100">
+                                @csrf
+                                <button type="submit"
+                                    class="btn btn-link text-danger w-100 text-start d-flex align-items-center">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </button>
+                            </form>
+                        </li>
                     </ul>
                 </nav>
             </div>

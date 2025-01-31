@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Group;
 use App\Models\Permission;
+use App\Models\Role;
+use App\Models\RolePermission;
 use Illuminate\Support\Facades\Route;
 
 class GenerateGroupsPermissions extends Command
@@ -20,7 +22,14 @@ class GenerateGroupsPermissions extends Command
     public function handle()
     {
         $this->info('Generating groups and permissions...');
+
         $routes = Route::getRoutes();
+        $adminRole = Role::where('name', 'admin')->first();
+
+        if (!$adminRole) {
+            $this->error('Admin role not found! Make sure you have an admin role in the database.');
+            return Command::FAILURE;
+        }
 
         foreach ($routes as $route) {
             $key = $route->getName();
@@ -29,19 +38,23 @@ class GenerateGroupsPermissions extends Command
                 $name = ucfirst(str_replace('.', '-', $key));
                 $prefix = explode('.', $key)[0];
 
-                // Check if the group exists, if not create it
                 $group = Group::firstOrCreate(['name' => $prefix]);
 
-                // Check if the permission already exists to avoid duplicates
-                Permission::firstOrCreate([
+                $permission = Permission::firstOrCreate([
                     'key' => $key,
+                ], [
                     'name' => $name,
                     'group_id' => $group->id,
+                ]);
+
+                RolePermission::firstOrCreate([
+                    'role_id' => $adminRole->id,    
+                    'permission_id' => $permission->id,
                 ]);
             }
         }
 
-        $this->info('Groups and permissions have been successfully generated.');
+        $this->info('Groups and permissions have been successfully generated and assigned to the admin role.');
         return Command::SUCCESS;
     }
 }

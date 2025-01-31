@@ -9,13 +9,22 @@
 
         <div class="card-body">
             @if (session('create'))
-                <div class="alert alert-success">{{ session('create') }}</div>
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                    {{ session('create') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             @endif
             @if (session('delete'))
-                <div class="alert alert-danger">{{ session('delete') }}</div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('delete') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             @endif
             @if (session('update'))
-                <div class="alert alert-info">{{ session('update') }}</div>
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    {{ session('update') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             @endif
 
             <div class="table-responsive">

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateRoleRequest;
+use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Group;
 use App\Models\Permission;
 use App\Models\Role;
@@ -15,7 +17,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::with('permissions')->paginate(10);
+        $roles = Role::with('permissions')->orderBy('id', 'desc')->paginate(10);
         return view('admin.roles.index', compact('roles'));
     }
 
@@ -29,12 +31,9 @@ class RoleController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(CreateRoleRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|max:255',
-            'permissions' => 'required',
-        ]);
+        $data = $request->validated();
         $role = Role::create($data);
         $role->permissions()->attach($request->permissions);
 
@@ -49,7 +48,7 @@ class RoleController extends Controller
     }
 
 
-    public function update(Request $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
         $role->name = $request->name;
         $role->permissions()->sync($request->permissions);
@@ -57,14 +56,12 @@ class RoleController extends Controller
         return redirect()->route('roles.index')->with('update', 'Updated');
     }
 
-    public function destroy(Request $request)
+    public function destroy(Role $role)
     {
-        $id = $request->id;
-        $destroy = Role::findOrFail($id);
-        $destroy->delete();
+        $role->delete();
         return redirect()->route('roles.index')->with('delete', 'deleted');
     }
-    public function status(Request $request, Role $role)
+    public function status(Role $role)
     {
         if ($role) {
             $role->status = !$role->status;
@@ -73,5 +70,4 @@ class RoleController extends Controller
 
         return redirect()->route('roles.index')->with('update', 'Status updated');
     }
-
 }

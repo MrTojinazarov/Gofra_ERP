@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\RoleUser;
 use App\Models\User;
@@ -22,20 +24,14 @@ class UserController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
-            'role' => 'required|exists:roles,id',
-        ]);
-
+        $data = $request->validated();
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role_id' => $request->role,
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role_id' => $data['role'],
         ]);
 
         return redirect()->route('users.index')->with('create', 'User created successfully.');
@@ -47,24 +43,20 @@ class UserController extends Controller
         return view('admin.users.edit', compact('user', 'roles'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable',
-            'role' => 'required|exists:roles,id',
-        ]);
+        $user = User::findOrFail($id);
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
 
         $user->name = $request->name;
         $user->email = $request->email;
         $user->role_id = $request->role;
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
-        }
         $user->save();
 
-        return redirect()->route('users.index')->with('update', 'User updated successfully.');
+        return redirect()->route('users.index')->with('success', 'User updated successfully!');
     }
 
     public function destroy(User $user)
