@@ -3,8 +3,8 @@
 @section('content')
     <div class="card mt-4">
         <div class="card-header">
-            <h3 class="card-title">Sections List</h3>
-            <a href="{{ route('sections.create') }}" class="btn btn-primary btn-sm float-right">Create section</a>
+            <h3 class="card-title">Workers List</h3>
+            <a href="{{ route('workers.create') }}" class="btn btn-primary btn-sm float-right">Create worker</a>
         </div>
 
         <div class="card-body">
@@ -33,28 +33,38 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            <th>Section</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Salary</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($sections as $section)
+                        @foreach ($workers as $worker)
                             <tr>
-                                <th>{{ $section->id }}</th>
-                                <td>{{ $section->name }}</td>
+                                <th>{{ $worker->id }}</th>
+                                <td>{{ $worker->user->name }}</td>
+                                <td>{{ $worker->section->name }}</td>
+                                <td>{{ $worker->phone }}</td>
+                                <td>{{ $worker->address }}</td>
+                                <td>{{ number_format($worker->salary) }} ({{ ucfirst($worker->salary_type) }})</td>
                                 <td>
-                                    <a href="{{ route('sections.edit', $section->id) }}"
+                                    <a href="{{ route('workers.edit', $worker->id) }}"
                                         class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('sections.destroy', $section->id) }}" method="POST"
+                                    <form action="{{ route('workers.destroy', $worker->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                {{ $workers->links() }}
             </div>
         </div>
     </div>

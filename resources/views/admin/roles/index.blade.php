@@ -41,7 +41,7 @@
                     <tbody>
                         @foreach ($roles as $role)
                             <tr>
-                                <td>{{ $role->id }}</td>
+                                <th>{{ $role->id }}</th>
                                 <td>{{ $role->name }}</td>
                                 <td>
                                     <form action="{{ route('roles.status', $role->id) }}" method="POST">

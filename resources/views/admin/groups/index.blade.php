@@ -26,7 +26,7 @@
                     <tbody>
                         @foreach ($groups as $group)
                             <tr>
-                                <td>{{ $group->id }}</td>
+                                <th>{{ $group->id }}</th>
                                 <td>{{ $group->name }}</td>
                                 <td>
                                     <form action="{{ route('groups.status', $group->id) }}" method="POST">
