@@ -19,7 +19,10 @@ class StoreWorkerRequest extends FormRequest
             'section_id' => 'required|exists:sections,id',
             'user_id' => 'required|exists:users,id',
             'salary' => 'required|numeric|min:0',
-            'salary_type' => 'required|string|in:workly,hourly',
+            'salary_type_id' => 'required|exists:salary_types,id',
+            'month_time' => 'required|numeric|min:0',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i',
         ];
     }
 
@@ -39,9 +42,15 @@ class StoreWorkerRequest extends FormRequest
             'salary.required' => 'The salary amount is required.',
             'salary.numeric' => 'The salary must be a valid number.',
             'salary.min' => 'The salary must be at least 0.',
-            'salary_type.required' => 'The salary type is required.',
-            'salary_type.string' => 'The salary type must be a valid string.',
-            'salary_type.in' => 'The salary type must be either workly or hourly.',
+            'salary_type_id.required' => 'The salary type selection is required.',
+            'salary_type_id.exists' => 'The selected salary type does not exist.',
+            'month_time.required' => 'The month time is required.',
+            'month_time.numeric' => 'The month time must be a valid number.',
+            'month_time.min' => 'The month time must be at least 0.',
+            'start_time.required' => 'The start time is required.',
+            'start_time.date_format' => 'The start time must be in the format HH:MM.',
+            'end_time.required' => 'The end time is required.',
+            'end_time.date_format' => 'The end time must be in the format HH:MM.',
         ];
     }
 }

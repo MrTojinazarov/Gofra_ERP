@@ -19,7 +19,10 @@ class UpdateWorkerRequest extends FormRequest
             'section_id' => 'sometimes|exists:sections,id',
             'user_id' => 'sometimes|exists:users,id',
             'salary' => 'sometimes|numeric|min:0',
-            'salary_type' => 'sometimes|string|in:workly,hourly',
+            'salary_type_id' => 'sometimes|exists:salary_types,id',
+            'month_time' => 'sometimes|numeric|min:0',
+            'start_time' => 'sometimes|date_format:H:i:s',
+            'end_time' => 'sometimes|date_format:H:i:s',
         ];
     }
 
@@ -34,8 +37,11 @@ class UpdateWorkerRequest extends FormRequest
             'user_id.exists' => 'The selected user does not exist.',
             'salary.numeric' => 'The salary must be a valid number.',
             'salary.min' => 'The salary must be at least 0.',
-            'salary_type.string' => 'The salary type must be a valid string.',
-            'salary_type.in' => 'The salary type must be either workly or hourly.',
+            'salary_type_id.exists' => 'The selected salary type does not exist.',
+            'month_time.numeric' => 'The month time must be a valid number.',
+            'month_time.min' => 'The month time must be at least 0.',
+            'start_time.date_format' => 'The start time must be in the format HH:MM.',
+            'end_time.date_format' => 'The end time must be in the format HH:MM.',
         ];
     }
 }

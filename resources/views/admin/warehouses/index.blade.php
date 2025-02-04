@@ -3,8 +3,8 @@
 @section('content')
     <div class="card mt-4">
         <div class="card-header">
-            <h3 class="card-title">Workers List</h3>
-            <a href="{{ route('workers.create') }}" class="btn btn-primary btn-sm float-right">Create worker</a>
+            <h3 class="card-title">Warehouses List</h3>
+            <a href="{{ route('warehouses.create') }}" class="btn btn-primary btn-sm float-right">Create warehouse</a>
         </div>
 
         <div class="card-body">
@@ -33,38 +33,46 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Section</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                            <th>Salary</th>
+                            <th>User</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($workers as $worker)
+                        @foreach ($warehouses as $warehouse)
                             <tr>
-                                <th>{{ $worker->id }}</th>
-                                <td>{{ $worker->user->name }}</td>
-                                <td>{{ $worker->section->name }}</td>
-                                <td>{{ $worker->phone }}</td>
-                                <td>{{ $worker->address }}</td>
-                                <td>{{ number_format($worker->salary) }} ({{ ucfirst($worker->salary_type->name) }})</td>
+                                <th>{{ $warehouse->id }}</th>
+                                <td>{{ $warehouse->name }}</td>
+                                <td>{{ $warehouse->user->name }}</td>
                                 <td>
-                                    <a href="{{ route('workers.edit', $worker->id) }}"
+                                    <form action="{{ route('warehouses.status', $warehouse->id) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        @if ($warehouse->status == 1)
+                                            <input type="hidden" name="id" value="{{ $warehouse->id }}">
+                                            <input type="hidden" name="active" value="0">
+                                            <button class="badge bg-success">Active</button>
+                                        @else
+                                            <input type="hidden" name="id" value="{{ $warehouse->id }}">
+                                            <input type="hidden" name="active" value="1">
+                                            <button class="badge bg-danger">Inactive</button>
+                                        @endif
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="{{ route('warehouses.edit', $warehouse->id) }}"
                                         class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('workers.destroy', $worker->id) }}" method="POST"
+                                    <form action="{{ route('warehouses.destroy', $warehouse->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Are you sure?')">Delete</button>
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                {{ $workers->links() }}
             </div>
         </div>
     </div>

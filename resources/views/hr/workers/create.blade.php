@@ -9,68 +9,99 @@
         <div class="card-body">
             <form action="{{ route('workers.store') }}" method="POST">
                 @csrf
-                <div class="mb-3">
-                    <label for="section_id" class="form-label">Section</label>
-                    <select class="form-select" name="section_id" id="section_id">
-                        @foreach ($sections as $section)
-                            <option value="{{ $section->id }}">{{ $section->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('section_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="section_id" class="form-label">Section</label>
+                        <select class="form-select" name="section_id" id="section_id">
+                            @foreach ($sections as $section)
+                                <option value="{{ $section->id }}">{{ $section->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('section_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                <div class="mb-3">
-                    <label for="user_id" class="form-label">User</label>
-                    <select class="form-select" name="user_id" id="user_id">
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('user_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="user_id" class="form-label">User</label>
+                        <select class="form-select" name="user_id" id="user_id">
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('user_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <input type="text" class="form-control @error('address') is-invalid @enderror" name="address"
-                        id="address" value="{{ old('address') }}">
-                    @error('address')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control @error('address') is-invalid @enderror" name="address"
+                            id="address" value="{{ old('address') }}">
+                        @error('address')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone"
-                        id="phone" value="{{ old('phone') }}">
-                    @error('phone')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone"
+                            id="phone" value="{{ old('phone') }}">
+                        @error('phone')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                <div class="mb-3">
-                    <label for="salary" class="form-label">Salary</label>
-                    <input type="text" class="form-control @error('salary') is-invalid @enderror" name="salary"
-                        id="salary" value="{{ old('salary') }}">
-                    @error('salary')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="salary" class="form-label">Salary</label>
+                        <input type="text" class="form-control @error('salary') is-invalid @enderror" name="salary"
+                            id="salary" value="{{ old('salary') }}">
+                        @error('salary')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                <div class="mb-3">
-                    <label for="salary_type" class="form-label">Salary Type</label>
-                    <select name="salary_type" class="form-control">
-                        <option value="hourly">Hourly</option>
-                        <option value="workly">Workly</option>
-                    </select>
-                    @error('salary_type')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <div class="col-md-6 mb-3">
+                        <label for="salary_type" class="form-label">Salary Type</label>
+                        <select name="salary_type_id" class="form-control">
+                            @foreach ($salary_types as $salary)
+                                <option value="{{ $salary->id }}" class="form-control">{{ $salary->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('salary_type')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="month_time" class="form-label">Month Time</label>
+                        <input type="number" class="form-control @error('month_time') is-invalid @enderror"
+                            name="month_time" id="month_time" value="{{ old('month_time') }}">
+                        @error('month_time')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="start_time" class="form-label">Start Time</label>
+                        <input type="time" class="form-control @error('start_time') is-invalid @enderror"
+                            name="start_time" id="start_time" value="{{ old('start_time') }}">
+                        @error('start_time')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="end_time" class="form-label">End Time</label>
+                        <input type="time" class="form-control @error('end_time') is-invalid @enderror" name="end_time"
+                            id="end_time" value="{{ old('end_time') }}">
+                        @error('end_time')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                 </div>
-                <button type="submit" class="btn btn-primary">Create Section</button>
+                <button type="submit" class="btn btn-primary">Create Worker</button>
             </form>
         </div>
     </div>

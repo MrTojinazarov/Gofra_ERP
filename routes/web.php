@@ -5,8 +5,10 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PermissionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SalaryTypeController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\WorkerController;
 
 Route::get('/', function () {
@@ -66,5 +68,26 @@ Route::middleware('check')->group(function () {
         Route::put('/{worker}', [WorkerController::class, 'update'])->name('workers.update');
         Route::delete('/{worker}', [WorkerController::class, 'destroy'])->name('workers.destroy');
     });
+
+    Route::prefix('salary_types')->group(function () {
+        Route::get('/', [SalaryTypeController::class, 'index'])->name('salary_types.index');
+        Route::get('/create', [SalaryTypeController::class, 'create'])->name('salary_types.create');
+        Route::post('/', [SalaryTypeController::class, 'store'])->name('salary_types.store');
+        Route::get('/{salary_type}/edit', [SalaryTypeController::class, 'edit'])->name('salary_types.edit');
+        Route::put('/{salary_type}', [SalaryTypeController::class, 'update'])->name('salary_types.update');
+        Route::delete('/{salary_type}', [SalaryTypeController::class, 'destroy'])->name('salary_types.destroy');
+        Route::patch('/{salary_type}/status', [SalaryTypeController::class, 'status'])->name('salary_types.status');
+    });
+
+    Route::prefix('warehouses')->group(function () {
+        Route::get('/', [WarehouseController::class, 'index'])->name('warehouses.index');
+        Route::get('/create', [WarehouseController::class, 'create'])->name('warehouses.create');
+        Route::post('/', [WarehouseController::class, 'store'])->name('warehouses.store');
+        Route::get('/{warehouse}/edit', [WarehouseController::class, 'edit'])->name('warehouses.edit');
+        Route::put('/{warehouse}', [WarehouseController::class, 'update'])->name('warehouses.update');
+        Route::delete('/{warehouse}', [WarehouseController::class, 'destroy'])->name('warehouses.destroy');
+        Route::patch('/{warehouse}/status', [WarehouseController::class, 'status'])->name('warehouses.status');
+    });
 });
+
 

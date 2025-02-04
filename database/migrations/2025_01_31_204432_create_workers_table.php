@@ -17,7 +17,10 @@ return new class extends Migration {
             $table->string('address');
             $table->string('phone');
             $table->integer('salary');
-            $table->string('salary_type');
+            $table->foreignId('salary_type_id')->constrained('salary_types')->onDelete('cascade');
+            $table->integer('month_time');
+            $table->time('start_time');
+            $table->time('end_time');
             $table->timestamps();
         });
     }

@@ -130,18 +130,45 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('sections.index') }}"
-                                class="nav-link {{ request()->is('sections*') ? 'active' : '' }}">
-                                <i class="fas fa-layer-group"></i>
-                                <p>Sections</p>
+                        <li
+                            class="nav-item has-treeview {{ request()->is('salary_types*') || request()->is('sections*') || request()->is('workers*') ? 'menu-open' : '' }}">
+                            <a href="#"
+                                class="nav-link {{ request()->is('salary_types*') || request()->is('sections*') || request()->is('workers*') ? 'active' : '' }}">
+                                <i class="fas fa-user-tie"></i>
+                                <p>
+                                    HR
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('salary_types.index') }}"
+                                        class="nav-link {{ request()->is('salary_types*') ? 'active' : '' }}">
+                                        <i class="fas fa-calculator"></i>
+                                        <p>Salary Types</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('sections.index') }}"
+                                        class="nav-link {{ request()->is('sections*') ? 'active' : '' }}">
+                                        <i class="fas fa-layer-group"></i>
+                                        <p>Sections</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('workers.index') }}"
+                                        class="nav-link {{ request()->is('workers*') ? 'active' : '' }}">
+                                        <i class="fas fa-users-cog"></i>
+                                        <p>Workers</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('workers.index') }}"
-                                class="nav-link {{ request()->is('workers*') ? 'active' : '' }}">
-                                <i class="fas fa-users-cog"></i>
-                                <p>Workers</p>
+                            <a href="{{ route('warehouses.index') }}"
+                                class="nav-link {{ request()->is('warehouses*') ? 'active' : '' }}">
+                                <i class="fas fa-warehouse"></i>
+                                <p>Warehouses</p>
                             </a>
                         </li>
                         <li class="list-group-item">
