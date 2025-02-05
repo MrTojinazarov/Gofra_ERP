@@ -7,13 +7,8 @@
         </div>
 
         <div class="card-body">
-            @if (session('create'))
-                <div class="alert alert-success">{{ session('create') }}</div>
-            @endif
-
             <form action="{{ route('users.store') }}" method="POST">
                 @csrf
-
                 <div class="mb-3">
                     <label for="name" class="form-label">User Name</label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
@@ -22,7 +17,6 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
@@ -31,7 +25,6 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control @error('password') is-invalid @enderror" name="password"
@@ -40,7 +33,6 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="role" class="form-label">Role</label>
                     <select name="role" class="form-control @error('role') is-invalid @enderror">
@@ -54,7 +46,6 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <button type="submit" class="btn btn-primary">Create User</button>
             </form>
         </div>

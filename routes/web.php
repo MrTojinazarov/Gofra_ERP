@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RevenueController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalaryTypeController;
@@ -88,6 +89,11 @@ Route::middleware('check')->group(function () {
         Route::delete('/{warehouse}', [WarehouseController::class, 'destroy'])->name('warehouses.destroy');
         Route::patch('/{warehouse}/status', [WarehouseController::class, 'status'])->name('warehouses.status');
     });
+
+    Route::prefix('revenues')->group(function () {
+        Route::get('/', [RevenueController::class, 'index'])->name('revenues.index');
+        Route::get('/create', [RevenueController::class, 'create'])->name('revenues.create');
+        Route::get('/{revenue}', [RevenueController::class, 'show'])->name('revenues.show');
+        Route::post('/', [RevenueController::class, 'store'])->name('revenues.store');
+    });
 });
-
-

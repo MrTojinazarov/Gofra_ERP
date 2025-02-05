@@ -7,10 +7,6 @@
         </div>
 
         <div class="card-body">
-            @if (session('create'))
-                <div class="alert alert-success">{{ session('create') }}</div>
-            @endif
-
             <form action="{{ route('salary_types.store') }}" method="POST">
                 @csrf
 
@@ -22,7 +18,6 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <button type="submit" class="btn btn-primary">Create Salary Type</button>
             </form>
         </div>

@@ -7,14 +7,9 @@
         </div>
 
         <div class="card-body">
-            @if (session('update'))
-                <div class="alert alert-info">{{ session('update') }}</div>
-            @endif
-
             <form action="{{ route('roles.update', $role->id) }}" method="POST">
                 @csrf
                 @method('PUT')
-
                 <div class="mb-3">
                     <label for="name" class="form-label">Role Name</label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
@@ -23,10 +18,8 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label class="form-label">Permissions</label>
-
                     <div class="accordion" id="permissionsAccordion">
                         @foreach ($groups as $group)
                             <div class="accordion-item">
@@ -59,12 +52,10 @@
                             </div>
                         @endforeach
                     </div>
-
                     @error('permissions')
                         <div class="text-danger mt-2">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <button type="submit" class="btn btn-primary">Update Role</button>
             </form>
         </div>

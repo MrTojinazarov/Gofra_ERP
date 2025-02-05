@@ -7,10 +7,6 @@
         </div>
 
         <div class="card-body">
-            @if (session('create'))
-                <div class="alert alert-success">{{ session('create') }}</div>
-            @endif
-
             <form action="{{ route('roles.store') }}" method="POST">
                 @csrf
                 <div class="mb-3">
@@ -21,10 +17,8 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="permission" class="form-label">Permissions</label>
-
                     <div class="accordion" id="permissionsAccordion">
                         @foreach ($groups as $group)
                             <div class="accordion-item">
@@ -54,12 +48,10 @@
                             </div>
                         @endforeach
                     </div>
-
                     @error('permissions')
                         <div class="text-danger mt-2">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <button type="submit" class="btn btn-primary">Create Role</button>
             </form>
         </div>

@@ -171,6 +171,13 @@
                                 <p>Warehouses</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('revenues.index') }}"
+                                class="nav-link {{ request()->is('revenues*') ? 'active' : '' }}">
+                                <i class="fas fa-chart-line"></i>
+                                <p>Revenues</p>
+                            </a>
+                        </li>
                         <li class="list-group-item">
                             <form action="{{ route('logout') }}" method="POST"
                                 class="d-flex align-items-center w-100">
