@@ -10,21 +10,16 @@
                 @csrf
 
                 <div class="mb-3">
-                    <label for="warehouse" class="form-label">Warehouse</label>
-                    <select class="form-control @error('warehouse') is-invalid @enderror" name="warehouse" id="warehouse">
+                    <label for="warehouse_id" class="form-label">Warehouse</label>
+                    <select class="form-control @error('warehouse_id') is-invalid @enderror" name="warehouse_id" id="warehouse_id">
                         <option value="">Select a Warehouse</option>
                         @foreach ($warehouses as $warehouse)
                             <option value="{{ $warehouse->id }}">{{ $warehouse->name }}</option>
                         @endforeach
                     </select>
-                    @error('warehouse')
+                    @error('warehouse_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="company" class="form-label">Company Name</label>
-                    <input type="text" class="form-control" name="company">
                 </div>
 
                 <div class="mb-3">
