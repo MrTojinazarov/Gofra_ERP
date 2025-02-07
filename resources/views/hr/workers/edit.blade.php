@@ -4,13 +4,19 @@
     <div class="card mt-4">
         <div class="card-header">
             <h3 class="card-title">Edit Worker: {{ $worker->name }}</h3>
+            <a href="{{ route('workers.index') }}" class="btn btn-info btn-sm float-right">Back</a>
         </div>
 
         <div class="card-body">
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <form action="{{ route('workers.update', $worker->id) }}" method="POST">
                 @csrf
                 @method('PUT')
-
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="user_id" class="form-label">User</label>

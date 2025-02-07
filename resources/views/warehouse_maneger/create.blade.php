@@ -4,14 +4,21 @@
     <div class="card mt-4">
         <div class="card-header">
             <h3 class="card-title">Revenue Import</h3>
+            <a href="{{ route('revenues.index') }}" class="btn btn-info btn-sm float-right">Back</a>
         </div>
         <div class="card-body">
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <form action="{{ route('revenues.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
                 <div class="mb-3">
                     <label for="warehouse_id" class="form-label">Warehouse</label>
-                    <select class="form-control @error('warehouse_id') is-invalid @enderror" name="warehouse_id" id="warehouse_id">
+                    <select class="form-control @error('warehouse_id') is-invalid @enderror" name="warehouse_id"
+                        id="warehouse_id">
                         <option value="">Select a Warehouse</option>
                         @foreach ($warehouses as $warehouse)
                             <option value="{{ $warehouse->id }}">{{ $warehouse->name }}</option>
@@ -43,7 +50,7 @@
 
             warehouseSelect.addEventListener('change', function() {
                 let selectedOption = warehouseSelect.options[warehouseSelect.selectedIndex];
-                companyInput.value = selectedOption.text; // Ombor nomini kompaniya maydoniga kiritish
+                companyInput.value = selectedOption.text;
             });
         });
     </script>

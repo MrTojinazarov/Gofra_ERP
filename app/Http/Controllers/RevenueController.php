@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\EntriesImport;
+use App\Http\Requests\ImportRequest;
 use App\Models\Entry;
-use App\Models\EntryMaterial;
-use App\Models\History;
-use App\Models\Material;
 use App\Models\Warehouse;
-use App\Models\WarehouseMaterial;
-use Illuminate\Http\Request;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Str;
+use App\Jobs\ImportEntriesJob;
+use App\Models\EntryMaterial;
+use App\Models\Material;
+use Illuminate\Support\Facades\Storage;
 
 class RevenueController extends Controller
 {
@@ -25,7 +21,8 @@ class RevenueController extends Controller
     public function show($id)
     {
         $revenue = Entry::with('entry_materials.material')->findOrFail($id);
-        return view('warehouse_maneger.show', compact('revenue'));
+        $materials = EntryMaterial::where('entry_id', $id)->get();
+        return view('warehouse_maneger.show', compact('revenue', 'materials'));
     }
 
     public function create()
@@ -33,69 +30,20 @@ class RevenueController extends Controller
         $warehouses = Warehouse::all();
         return view('warehouse_maneger.create', compact('warehouses'));
     }
-    public function store(Request $request)
+
+    public function store(ImportRequest $request)
     {
-        $request->validate([
-            'warehouse_id' => 'required|exists:warehouses,id',
-            'file' => 'required|mimes:xlsx,csv',
-        ]);
-        $rows = Excel::toCollection(new EntriesImport, $request->file('file'));
+        $request->validated();
 
-        $entry = Entry::create([
-            'company' => $rows[0][0][2],
-            'date' => Date::excelToDateTimeObject($rows[0][1][2])->format('Y-m-d'),
-            'text' => $rows[0][2][2],
-        ]);
-
-        for ($i = 4; $i <= 8; $i++) {
-            $row = $rows[0][$i] ?? null;
-
-            if (!$row || !isset($row[1])) {
-                continue;
-            }
-
-            $slug = Str::slug($row[1]);
-
-            if ($slug) {
-                $material = Material::firstOrCreate(
-                    ['slug' => $slug],
-                    ['name' => $row[1]]
-                );
-
-                $previousValue = WarehouseMaterial::where('warehouse_id', $request->warehouse_id)
-                    ->where('product_id', $material->id)
-                    ->value('value') ?? 0;
-
-
-                $currentValue = $previousValue + ($row[3] ?? 0);
-
-                EntryMaterial::create([
-                    'entry_id' => $entry->id,
-                    'material_id' => $material->id,
-                    'unit' => $row[2] ?? null,
-                    'quantity' => $row[3] ?? null,
-                    'price' => $row[4] ?? null,
-                    'total' => (isset($row[3], $row[4]) && is_numeric($row[3]) && is_numeric($row[4]))
-                        ? $row[3] * $row[4] : 0,
-                ]);
-
-                WarehouseMaterial::updateOrCreate(
-                    ['warehouse_id' => $request->warehouse_id, 'product_id' => $material->id],
-                    ['value' => $currentValue, 'type' => 1]
-                );
-
-                History::create([
-                    'type' => 1,
-                    'material_id' => $material->id,
-                    'quantity' => $row[3] ?? null,
-                    'was' => $previousValue,
-                    'been' => $currentValue,
-                    'from_id' => $entry->id,
-                    'to_id' => $request->warehouse_id
-                ]);
-            }
+        if (Warehouse::find($request->warehouse_id)->status == false) {
+            return redirect()->back()->with('error', 'Warehouse is not active');
         }
 
-        return redirect()->route('revenues.index')->with('create', 'Revenue created successfully.');
+        $path = $request->file('file')->store('imports');
+
+        ImportEntriesJob::dispatch($path, $request->warehouse_id);
+
+        return redirect()->route('revenues.index')->with('create', 'Revenue import started, it will be processed soon.');
     }
+
 }

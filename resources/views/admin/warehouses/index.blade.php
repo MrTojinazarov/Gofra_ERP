@@ -60,14 +60,21 @@
                                     </form>
                                 </td>
                                 <td>
-                                    <a href="{{ route('warehouses.edit', $warehouse->id) }}"
-                                        class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('warehouses.destroy', $warehouse->id) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <form action="{{ route('warehouses.show', $warehouse->id) }}" method="GET"
+                                            class="mr-2">
+                                            <button type="submit" class="btn btn-info btn-sm"><i
+                                                    class="fas fa-eye"></i></button>
+                                        </form>
+                                        <a href="{{ route('warehouses.edit', $warehouse->id) }}"
+                                            class="btn btn-warning btn-sm mr-2">Edit</a>
+                                        <form action="{{ route('warehouses.destroy', $warehouse->id) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

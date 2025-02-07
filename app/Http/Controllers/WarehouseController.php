@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Warehouse;
+use App\Models\WarehouseMaterial;
 use Illuminate\Http\Request;
 
 class WarehouseController extends Controller
@@ -23,8 +24,8 @@ class WarehouseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-           'name' => 'required|string|max:255',
-           'user_id' => 'required|exists:users,id',
+            'name' => 'required|string|max:255',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         $warehouse = Warehouse::create($request->all());
@@ -60,4 +61,49 @@ class WarehouseController extends Controller
         $warehouse->save();
         return redirect()->route('warehouses.index')->with('update', 'Warehouse status updated');
     }
+
+    public function show($id)
+    {
+        $warehouse = Warehouse::find($id);
+        $sklads = WarehouseMaterial::where('warehouse_id', $id)->get();
+        $warehouses = Warehouse::where('id', '!=', $id)->get();
+        return view('admin.warehouses.show', compact('warehouses', 'sklads'));
+    }
+
+    public function transfer(Request $request)
+    {
+        $request->validate([
+            'material_id' => 'required|exists:warehouse_materials,id',
+            'warehouse_id' => 'required|exists:warehouses,id',
+            'quantity' => 'required|numeric|min:1',
+            'real' => 'required|exists:warehouses,id',
+        ]);
+
+        $material = WarehouseMaterial::where('warehouse_id', $request->real)->get()->first();
+
+        if ($material->value < $request->quantity) {
+            return redirect()->back()->with('error', 'Not enough materials in stock.');
+        }
+        $material->value -= $request->quantity;
+        $material->save();
+
+        $targetMaterial = WarehouseMaterial::where('warehouse_id', $request->warehouse_id)
+            ->where('product_id', $request->material_id)
+            ->first();
+
+        if ($targetMaterial) {
+            $targetMaterial->value += $request->quantity;
+            $targetMaterial->save();
+        } else {
+            WarehouseMaterial::create([
+                'warehouse_id' => $request->warehouse_id,
+                'product_id' => $request->material_id,
+                'value' => $request->quantity,
+                'type' => 2
+            ]);
+        }
+
+        return redirect()->route('warehouses.index')->with('update', 'Transfer made successfully.');
+    }
+
 }

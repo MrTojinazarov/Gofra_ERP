@@ -10,7 +10,7 @@ class WarehouseMaterial extends Model
 
     public function material()
     {
-        return $this->belongsTo(Material::class,'material_id');
+        return $this->belongsTo(Material::class,'product_id');
     }
 
     public function warehouse()

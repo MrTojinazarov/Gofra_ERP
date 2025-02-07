@@ -4,9 +4,16 @@
     <div class="card mt-4">
         <div class="card-header">
             <h3 class="card-title">Edit Permission: {{ $permission->name }}</h3>
+            <a href="{{ route('permissions.index') }}" class="btn btn-info btn-sm float-right">Back</a>
         </div>
 
         <div class="card-body">
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <form action="{{ route('permissions.update', $permission->id) }}" method="POST">
                 @csrf
                 @method('PUT')

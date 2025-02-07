@@ -83,7 +83,9 @@ Route::middleware('check')->group(function () {
     Route::prefix('warehouses')->group(function () {
         Route::get('/', [WarehouseController::class, 'index'])->name('warehouses.index');
         Route::get('/create', [WarehouseController::class, 'create'])->name('warehouses.create');
+        Route::get('/{warehouse}', [WarehouseController::class, 'show'])->name('warehouses.show');
         Route::post('/', [WarehouseController::class, 'store'])->name('warehouses.store');
+        Route::post('/transfer',[WarehouseController::class, 'transfer'])->name('warehouses.transfer');
         Route::get('/{warehouse}/edit', [WarehouseController::class, 'edit'])->name('warehouses.edit');
         Route::put('/{warehouse}', [WarehouseController::class, 'update'])->name('warehouses.update');
         Route::delete('/{warehouse}', [WarehouseController::class, 'destroy'])->name('warehouses.destroy');

@@ -34,34 +34,11 @@
                                 <td>{{ $revenue->date }}</td>
                                 <td>{{ $revenue->text }}</td>
                                 <td>
-                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#materials{{ $revenue->id }}">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
+                                    <form action="{{ route('revenues.show', $revenue->id) }}" method="GET">
+                                        <button type="submit" class="btn btn-info"><i class="fas fa-eye"></i></button>
+                                    </form>
                                 </td>
                             </tr>
-
-                            <div class="modal fade" id="materials{{ $revenue->id }}" tabindex="-1"
-                                aria-labelledby="materialsLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="materialsLabel">Materials for Revenue
-                                                #{{ $revenue->id }}</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <ul>
-                                                @foreach ($revenue->entry_materials as $entryMaterial)
-                                                    <li>{{ $entryMaterial->material->name }} -
-                                                        {{ $entryMaterial->quantity }} {{ $entryMaterial->unit }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         @endforeach
                     </tbody>
                 </table>
