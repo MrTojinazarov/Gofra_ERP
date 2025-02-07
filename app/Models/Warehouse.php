@@ -16,4 +16,9 @@ class Warehouse extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function product_materials()
+    {
+        return $this->hasMany(ProductMaterial::class, 'warehouse_id');
+    }
 }

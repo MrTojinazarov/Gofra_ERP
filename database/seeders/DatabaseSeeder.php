@@ -77,42 +77,5 @@ class DatabaseSeeder extends Seeder
         Section::create([
             'name' => 'Boshqaruv',
         ]);
-
-        // for ($i = 1; $i <= 5; $i++) {
-        //     Entry::create([
-        //         'company' => $faker->company,
-        //         'date' => $faker->date('Y-m-d'),
-        //         'text' => $faker->sentence,
-        //     ]);
-        // }
-
-        // for ($i = 1; $i <= 5; $i++) {
-        //     Material::create([
-        //         'name' => ucfirst($faker->word),
-        //         'slug' => Str::slug($faker->word),
-        //     ]);
-        // }
-
-        // if (Entry::count() == 0) {
-        //     Entry::factory(10)->create();
-        // }
-
-        // if (Material::count() == 0) {
-        //     Material::factory(10)->create();
-        // }
-
-        // for ($i = 1; $i <= 20; $i++) {
-        //     $quantity = $faker->randomFloat(2, 1, 100);
-        //     $price = $faker->randomFloat(2, 1000, 50000);
-
-        //     EntryMaterial::create([
-        //         'entry_id' => Entry::inRandomOrder()->first()->id,
-        //         'material_id' => Material::inRandomOrder()->first()->id,
-        //         'quantity' => $quantity,
-        //         'price' => $price,
-        //         'total' => $quantity * $price,
-        //         'unit' => $faker->randomElement(['kg', 'm', 'piece']),
-        //     ]);
-        // }
     }
 }

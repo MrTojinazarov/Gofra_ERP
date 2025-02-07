@@ -11,6 +11,7 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\WorkerController;
+use App\Livewire\ProductComponent;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -85,7 +86,7 @@ Route::middleware('check')->group(function () {
         Route::get('/create', [WarehouseController::class, 'create'])->name('warehouses.create');
         Route::get('/{warehouse}', [WarehouseController::class, 'show'])->name('warehouses.show');
         Route::post('/', [WarehouseController::class, 'store'])->name('warehouses.store');
-        Route::post('/transfer',[WarehouseController::class, 'transfer'])->name('warehouses.transfer');
+        Route::post('/transfer', [WarehouseController::class, 'transfer'])->name('warehouses.transfer');
         Route::get('/{warehouse}/edit', [WarehouseController::class, 'edit'])->name('warehouses.edit');
         Route::put('/{warehouse}', [WarehouseController::class, 'update'])->name('warehouses.update');
         Route::delete('/{warehouse}', [WarehouseController::class, 'destroy'])->name('warehouses.destroy');
@@ -97,5 +98,9 @@ Route::middleware('check')->group(function () {
         Route::get('/create', [RevenueController::class, 'create'])->name('revenues.create');
         Route::get('/{revenue}', [RevenueController::class, 'show'])->name('revenues.show');
         Route::post('/', [RevenueController::class, 'store'])->name('revenues.store');
+    });
+
+    Route::prefix('products')->group(function () {
+        Route::get('/', ProductComponent::class)->name('products.index');
     });
 });

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('components.layouts.app')
 
 @section('content')
     <div class="card mt-4">
@@ -8,6 +8,18 @@
         </div>
 
         <div class="card-body">
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if (session('update'))
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    {{ session('update') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <div class="table-responsive">
                 <table class="table table-bordered table-striped table-hover text-center">
                     <thead>
@@ -28,7 +40,7 @@
                                 <td>{{ number_format($sklad->material->entry_materials->first()->price) }} so'm</td>
                                 <td>{{ number_format($sklad->value) }}
                                     {{ $sklad->material->entry_materials->first()->unit }}</td>
-                                <td>{{ number_format($sklad->material->entry_materials->first()->total) }}</td>
+                                <td>{{ number_format($sklad->material->entry_materials->first()->price * $sklad->value) }}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                         data-target="#transferModal{{ $sklad->id }}">
@@ -59,6 +71,7 @@
                                                             <label for="warehouse_id">Select Warehouse</label>
                                                             <select name="warehouse_id" id="warehouse_id"
                                                                 class="form-control">
+                                                                <option value="">Choose warehouse</option>
                                                                 @foreach ($warehouses as $warehouse)
                                                                     <option value="{{ $warehouse->id }}">
                                                                         {{ $warehouse->name }}
@@ -71,9 +84,7 @@
                                                             <label for="quantity">Quantity
                                                                 {{ $sklad->material->entry_materials->first()->unit }}</label>
                                                             <input type="number" name="quantity" class="form-control"
-                                                                min="1"
-                                                                max="{{ $sklad->material->entry_materials->first()->quantity }}"
-                                                                required>
+                                                                min="1" max="{{ $sklad->value }}" required>
                                                         </div>
 
                                                         <button type="submit" class="btn btn-success">Transfer</button>

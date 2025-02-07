@@ -103,7 +103,7 @@ class WarehouseController extends Controller
             ]);
         }
 
-        return redirect()->route('warehouses.index')->with('update', 'Transfer made successfully.');
+        return redirect()->back()->with('update', 'Transfer made successfully.');
     }
 
 }

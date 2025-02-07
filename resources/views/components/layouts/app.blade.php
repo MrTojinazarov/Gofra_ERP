@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ERP</title>
     <link rel="icon" href="{{ asset('erp.webp') }}" type="image/x-icon">
+    @livewireStyles
     <!-- Add Select2 CSS in the <head> section -->
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
@@ -164,18 +165,38 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('warehouses.index') }}"
-                                class="nav-link {{ request()->is('warehouses*') ? 'active' : '' }}">
+                        <li
+                            class="nav-item has-treeview {{ request()->is('warehouses*') || request()->is('revenues*') ? 'menu-open' : '' }}">
+                            <a href="#"
+                                class="nav-link {{ request()->is('warehouses*') || request()->is('revenues*') ? 'active' : '' }}">
                                 <i class="fas fa-warehouse"></i>
-                                <p>Warehouses</p>
+                                <p>
+                                    Warehouse Manager
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('warehouses.index') }}"
+                                        class="nav-link {{ request()->is('warehouses*') ? 'active' : '' }}">
+                                        <i class="fas fa-boxes"></i>
+                                        <p>Warehouses</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('revenues.index') }}"
+                                        class="nav-link {{ request()->is('revenues*') ? 'active' : '' }}">
+                                        <i class="fas fa-chart-line"></i>
+                                        <p>Revenues</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('revenues.index') }}"
-                                class="nav-link {{ request()->is('revenues*') ? 'active' : '' }}">
-                                <i class="fas fa-chart-line"></i>
-                                <p>Revenues</p>
+                            <a href="{{ route('products.index') }}"
+                                class="nav-link {{ request()->is('products*') ? 'active' : '' }}">
+                                <i class="fas fa-tags"></i>
+                                <p>Products</p>
                             </a>
                         </li>
                         <li class="list-group-item">
@@ -196,11 +217,16 @@
         <div class="content-wrapper">
             <section class="content">
                 <div class="container-fluid">
-                    @yield('content')
+                    @if (request()->route()->getName() == 'products.index')
+                        {{ $slot }}
+                    @else
+                        @yield('content')
+                    @endif
                 </div>
             </section>
         </div>
     </div>
+    @livewireScripts
     <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
     <!-- jQuery -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
