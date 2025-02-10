@@ -105,5 +105,4 @@ class WarehouseController extends Controller
 
         return redirect()->back()->with('update', 'Transfer made successfully.');
     }
-
 }

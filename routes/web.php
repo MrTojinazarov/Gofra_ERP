@@ -95,6 +95,7 @@ Route::middleware('check')->group(function () {
 
     Route::prefix('revenues')->group(function () {
         Route::get('/', [RevenueController::class, 'index'])->name('revenues.index');
+   
         Route::get('/create', [RevenueController::class, 'create'])->name('revenues.create');
         Route::get('/{revenue}', [RevenueController::class, 'show'])->name('revenues.show');
         Route::post('/', [RevenueController::class, 'store'])->name('revenues.store');

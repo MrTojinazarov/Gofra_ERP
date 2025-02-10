@@ -28,7 +28,10 @@
                                 @endif
                             </td>
                             <td>
-                                <button wire:click="editProduct({{ $product->id }})" class="btn btn-warning btn-sm">
+                                <button wire:click="viewProduct({{ $product->id }})" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button wire:click="openEditModal({{ $product->id }})" class="btn btn-warning btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button wire:click="deleteProduct({{ $product->id }})" class="btn btn-danger btn-sm">
@@ -42,43 +45,15 @@
         </div>
     </div>
 
-    {{-- Modal --}}
     @if ($modalOpen)
-        <div class="modal show d-block" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">{{ $product_id ? 'Edit Product' : 'Create Product' }}</h5>
-                        <button type="button" class="btn-close" wire:click="closeModal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" class="form-control mb-2" placeholder="Product Name" wire:model="name">
-                        <input type="file" class="form-control mb-2" wire:model="image">
+        @include('manufacturer.create-modal')
+    @endif
 
-                        <h6>Materials</h6>
-                        @foreach ($materials as $index => $material)
-                            <div class="d-flex gap-2 mb-2">
-                                <select class="form-control" wire:model="materials.{{ $index }}.material_id">
-                                    <option value="">Select Material</option>
-                                    @foreach ($materialsList as $mat)
-                                        <option value="{{ $mat->id }}">{{ $mat->name }}</option>
-                                    @endforeach
-                                </select>
-                                <input type="number" class="form-control" placeholder="Value"
-                                    wire:model="materials.{{ $index }}.value">
-                                <button class="btn btn-danger"
-                                    wire:click="removeMaterial({{ $index }})">×</button>
-                            </div>
-                        @endforeach
+    @if ($editModalOpen)
+        @include('manufacturer.edit-modal')
+    @endif
 
-                        <button class="btn btn-secondary btn-sm" wire:click="addMaterial">+ Add Material</button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" wire:click="closeModal">Close</button>
-                        <button type="button" class="btn btn-primary" wire:click="saveProduct">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    @if ($viewModalOpen)
+        @include('manufacturer.view-modal')
     @endif
 </div>

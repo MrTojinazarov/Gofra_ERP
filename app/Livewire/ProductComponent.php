@@ -13,9 +13,15 @@ class ProductComponent extends Component
     use WithFileUploads;
 
     public $products, $name, $image, $materials = [], $product_id;
-    public $modalOpen = false;
+    public $modalOpen = false, $editModalOpen = false, $viewModalOpen = false;
+    public $viewMaterials = [];
 
     public function mount()
+    {
+        $this->loadProducts();
+    }
+
+    private function loadProducts()
     {
         $this->products = Product::with('product_materials.material')->get();
     }
@@ -23,12 +29,30 @@ class ProductComponent extends Component
     public function openModal()
     {
         $this->resetFields();
+        $this->addMaterial();
         $this->modalOpen = true;
     }
 
     public function closeModal()
     {
         $this->modalOpen = false;
+    }
+
+    public function openEditModal($id)
+    {
+        $product = Product::with('product_materials')->findOrFail($id);
+        $this->product_id = $product->id;
+        $this->name = $product->name;
+        $this->materials = $product->product_materials->map(function ($mat) {
+            return ['material_id' => $mat->material_id, 'value' => $mat->value, 'unit' => $mat->unit];
+        })->toArray();
+
+        $this->editModalOpen = true;
+    }
+
+    public function closeEditModal()
+    {
+        $this->editModalOpen = false;
     }
 
     private function resetFields()
@@ -39,10 +63,9 @@ class ProductComponent extends Component
         $this->materials = [];
     }
 
-
     public function addMaterial()
     {
-        $this->materials[] = ['material_id' => '', 'value' => '', 'unit' => 'kg'];
+        $this->materials[] = ['material_id' => '', 'value' => '', 'unit' => ''];
     }
 
     public function removeMaterial($index)
@@ -62,39 +85,78 @@ class ProductComponent extends Component
 
         $imagePath = $this->image ? $this->image->store('products', 'public') : null;
 
-        $product = Product::updateOrCreate(
-            ['id' => $this->product_id],
-            ['name' => $this->name, 'image' => $imagePath]
-        );
+        $product = Product::create([
+            'name' => $this->name,
+            'image' => $imagePath
+        ]);
 
         foreach ($this->materials as $mat) {
-            ProductMaterial::updateOrCreate(
-                ['product_id' => $product->id, 'material_id' => $mat['material_id']],
-                ['value' => $mat['value'], 'unit' => $mat['unit'], 'warehouse_id' => 1]
-            );
+            $material = Material::find($mat['material_id']);
+            $unit = $material->entry_materials->first()->unit ?? '';
+
+            ProductMaterial::create([
+                'product_id' => $product->id,
+                'material_id' => $mat['material_id'],
+                'value' => $mat['value'],
+                'unit' => $unit,
+                'warehouse_id' => 1
+            ]);
         }
 
-        $this->mount();
+        $this->loadProducts();
         $this->closeModal();
     }
 
-    public function editProduct($id)
+    public function updateProduct()
     {
-        $product = Product::with('product_materials')->findOrFail($id);
-        $this->product_id = $product->id;
-        $this->name = $product->name;
-        $this->image = $product->image;
-        $this->materials = $product->product_materials->map(function ($mat) {
-            return ['material_id' => $mat->material_id, 'value' => $mat->value, 'unit' => $mat->unit];
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'materials.*.material_id' => 'required|exists:materials,id',
+            'materials.*.value' => 'required|numeric|min:0.1',
+        ]);
+
+        $product = Product::findOrFail($this->product_id);
+        $product->update(['name' => $this->name]);
+
+        ProductMaterial::where('product_id', $product->id)->delete();
+
+        foreach ($this->materials as $mat) {
+            ProductMaterial::create([
+                'product_id' => $product->id,
+                'material_id' => $mat['material_id'],
+                'value' => $mat['value'],
+                'unit' => $mat['unit'],
+                'warehouse_id' => 1
+            ]);
+        }
+
+        $this->loadProducts();
+        $this->closeEditModal();
+    }
+
+    public function viewProduct($id)
+    {
+        $product = Product::with('product_materials.material')->findOrFail($id);
+        $this->viewMaterials = $product->product_materials->map(function ($mat) {
+            return [
+                'name' => $mat->material->name,
+                'value' => $mat->value,
+                'unit' => $mat->unit
+            ];
         })->toArray();
 
-        $this->modalOpen = true;
+        $this->viewModalOpen = true;
+    }
+
+    public function closeViewModal()
+    {
+        $this->viewModalOpen = false;
     }
 
     public function deleteProduct($id)
     {
         Product::findOrFail($id)->delete();
-        $this->mount();
+        $this->loadProducts();
     }
 
     public function render()
