@@ -67,7 +67,7 @@
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
                 <img src="{{ asset('erp.webp') }}" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text">EPR</span>
+                <span class="brand-text">Gofra ERP</span>
             </a>
 
             <!-- Sidebar -->
