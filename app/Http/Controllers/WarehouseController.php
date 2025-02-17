@@ -79,7 +79,7 @@ class WarehouseController extends Controller
             'real' => 'required|exists:warehouses,id',
         ]);
 
-        $material = WarehouseMaterial::where('warehouse_id', $request->real)->get()->first();
+        $material = WarehouseMaterial::where('warehouse_id', $request->real)->where('product_id', $request->material_id)->first();
 
         if ($material->value < $request->quantity) {
             return redirect()->back()->with('error', 'Not enough materials in stock.');
